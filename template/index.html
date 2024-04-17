@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+
+        .todo-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .add-todo {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .add-todo input[type="text"] {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .add-todo button {
+            padding: 5px 10px;
+            margin-left: 5px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Todo List</h1>
+        <div id="todo-list"></div>
+        <div class="add-todo">
+            <input type="text" id="new-todo" placeholder="Add new todo">
+            <button onclick="addTodo()">Add</button>
+        </div>
+    </div>
+
+    <script>
+        const todos = [];
+
+        function renderTodos() {
+            const todoList = document.getElementById("todo-list");
+            todoList.innerHTML = "";
+            todos.forEach((todo, index) => {
+                const todoItem = document.createElement("div");
+                todoItem.classList.add("todo-item");
+                todoItem.innerHTML = `
+                    <input type="checkbox" onchange="toggleTodo(${index})" ${todo.completed ? "checked" : ""}>
+                    <span>${todo.text}</span>
+                    <button onclick="deleteTodo(${index})">&times;</button>
+                `;
+                todoList.appendChild(todoItem);
+            });
+        }
+
+        function addTodo() {
+            const input = document.getElementById("new-todo");
+            const text = input.value.trim();
+            if (text === "") return;
+            todos.push({ text, completed: false });
+            renderTodos();
+            input.value = "";
+        }
+
+        function deleteTodo(index) {
+            todos.splice(index, 1);
+            renderTodos();
+        }
+
+        function toggleTodo(index) {
+            todos[index].completed = !todos[index].completed;
+            renderTodos();
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderTodos();
+        });
+    </script>
+</body>
+</html>
